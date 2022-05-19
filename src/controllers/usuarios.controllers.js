@@ -57,33 +57,34 @@ const actualizarUsuario = async(req, res) => {
     const { password } = req.body;
 
     if(password) {
-        
         const salt =bcryptjs.genSaltSync();
         usu.password = bcryptjs.hashSync(password, salt);
-
     }
+
     // const usu = req.body;
+    
+    await Usuario.findByIdAndUpdate(id, usu);
 
-    const usuario = await Usuario.findByIdAndUpdate(id, usu);
-
+    const usuario = await Usuario.findById(id);
     // console.log(req.body);
-    res.json(usuario);
+    res.json({
+        msg: 'El usuario se a actualizado',
+        // usu
+    });
 }
 
 const borrarUsuario = async(req, res) => {
 
     const { id } = req.params;
 
-    const usu = req.body;
-    usu.estado = false;
-
-    // const usu = req.body;
-
-    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    
+    
+    await Usuario.findByIdAndUpdate(id, {estado: false});
 
     // console.log(req.body);
-    res.json(usuario);
 
+
+    res.json({msg: 'El usuario se a borrado'});
 }
 
 
