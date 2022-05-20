@@ -5,6 +5,8 @@ const { todosUsuarios,
         agregarUsuario, 
         actualizarUsuario, 
         borrarUsuario } = require('../controllers/usuarios.controller');
+const verificarJWT = require('../middlewares/verificarJWT');
+
 
 
 const router = express.Router();
@@ -12,7 +14,9 @@ const router = express.Router();
 
 
 
-router.get('/',[ ] , todosUsuarios);
+router.get('/',[
+        verificarJWT
+], todosUsuarios);
 
 router.get('/:id',[ ] , usuariosId);
 
