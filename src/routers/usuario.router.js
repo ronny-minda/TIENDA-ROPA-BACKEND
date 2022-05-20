@@ -4,7 +4,7 @@ const { todosUsuarios,
         usuariosId, 
         agregarUsuario, 
         actualizarUsuario, 
-        borrarUsuario } = require('../controllers/usuarios.controllers');
+        borrarUsuario } = require('../controllers/usuarios.controller');
 
 
 const router = express.Router();

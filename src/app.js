@@ -17,8 +17,9 @@ const main = () => {
     const PORT = process.env.PORT || 3000;
 
 
-
+    // Rutas
     app.use('/api/usuario/', require('./routers/usuario.router'));
+    app.use('/api/auth/', require('./routers/auth.router'));
 
 
 
