@@ -7,7 +7,7 @@ const verificarJWT = async(req, res, next) => {
     const token = req.header('x-token');
 
     if( !token ) {
-        return res.status(401).json('no hay token en la peticion')
+        return res.status(401).json({msg: 'no hay token en la peticion'})
     }
 
     try {
@@ -17,7 +17,7 @@ const verificarJWT = async(req, res, next) => {
         // return res.json({msg: 'json valido'});
 
         const usuario = await Usuario.findById(uid);
-        console.log(usuario);
+        // console.log(usuario);
 
         if (!usuario) {
             return res.status(401).json({msg: 'Token no valido - No existe en la DB'});
@@ -27,18 +27,17 @@ const verificarJWT = async(req, res, next) => {
             return res.status(401).json({msg: 'Token no valido - el estado en false'});
         }
 
-        if (usuario.rol === 'USER_ROLE') {
-            return res.status(401).json({msg: 'El usuario no tiene permisos'});
-        }
+        // if (usuario.rol === 'USER_ROLE') {
+        //     return res.status(401).json({msg: 'El usuario no tiene permisos'});
+        // }
 
-        req.body = usuario;
+
+        // req.body = usuario;
         
         next();
 
-        // console.log(verificar);
-
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         return res.status(401).json({msg: 'el token no es valido'})
     }
 

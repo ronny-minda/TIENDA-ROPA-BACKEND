@@ -8,10 +8,10 @@ const { findByIdAndDelete, findByIdAndUpdate } = require('../models/usuario.mode
 const todosUsuarios = async(req, res) => {
 
     //Debuelve el total de usuarios
-    const total = await Usuario.countDocuments();
+    const total = await Usuario.countDocuments({estado: true});
 
     //Debuelve todos los usuarios
-    const usuarios = await Usuario.find();
+    const usuarios = await Usuario.find({estado: true});
 
     res.json({
         total,
@@ -45,31 +45,34 @@ const agregarUsuario = async(req, res) => {
 
     await usuario.save();
 
-    res.json(usuario);
+    res.json({
+        msg: 'Usuario creado',
+        usuario
+    });
 }
 
 const actualizarUsuario = async(req, res) => {
 
     const { id } = req.params;
 
+
     const usu = req.body;
 
-    const { password } = req.body;
+    console.log(usu);
+
+    const { password } = usu;
 
     if(password) {
         const salt =bcryptjs.genSaltSync();
         usu.password = bcryptjs.hashSync(password, salt);
     }
 
-    // const usu = req.body;
-    
-    await Usuario.findByIdAndUpdate(id, usu);
 
-    const usuario = await Usuario.findById(id);
-    // console.log(req.body);
+    const usuario = await Usuario.findByIdAndUpdate(id, usu);
+
     res.json({
         msg: 'El usuario se a actualizado',
-        // usu
+        usuario
     });
 }
 
