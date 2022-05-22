@@ -1,8 +1,18 @@
 
 const Usuario = require('../models/usuario.model');
 
-const existeEmail = (req, res, next) => {
+const existeEmail = async( correo ) => {
+
+    const usuario = await Usuario.findOne({correo});
+
+    // console.log(usuario);
+
+    if(usuario) {
+        throw new Error('Este correo ya existe!');
+    }
     
+    // return;
+
 }
 
 const existeUsuario = async(id) => {

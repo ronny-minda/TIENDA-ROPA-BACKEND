@@ -1,11 +1,14 @@
 
 const Usuario = require('../models/usuario.model');
 const bcryptjs = require('bcryptjs');
-const { findByIdAndDelete, findByIdAndUpdate } = require('../models/usuario.model');
+const { generarJWT } = require('../helpers/generarJWT.help');
+
+// const { findByIdAndDelete, findByIdAndUpdate } = require('../models/usuario.model');
 
 
 
 const todosUsuarios = async(req, res) => {
+
 
     //Debuelve el total de usuarios
     const total = await Usuario.countDocuments({estado: true});
@@ -45,9 +48,14 @@ const agregarUsuario = async(req, res) => {
 
     await usuario.save();
 
+    const token = await generarJWT( usuario._id );
+
+    // console.log(usuario);
+
     res.json({
         msg: 'Usuario creado',
-        usuario
+        usuario,
+        token
     });
 }
 
@@ -68,7 +76,7 @@ const actualizarUsuario = async(req, res) => {
     }
 
 
-    const usuario = await Usuario.findByIdAndUpdate(id, usu);
+    const usuario = await Usuario.findByIdAndUpdate(id, usu, { new: true });
 
     res.json({
         msg: 'El usuario se a actualizado',
@@ -82,12 +90,15 @@ const borrarUsuario = async(req, res) => {
 
     
     
-    await Usuario.findByIdAndUpdate(id, {estado: false});
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false}, {new: true});
 
     // console.log(req.body);
 
 
-    res.json({msg: 'El usuario se a borrado'});
+    res.json({
+        msg: 'El usuario se a borrado',
+        usuario
+    });
 }
 
 

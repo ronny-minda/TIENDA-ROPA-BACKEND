@@ -6,6 +6,8 @@ const verificarJWT = async(req, res, next) => {
 
     const token = req.header('x-token');
 
+    // console.log({token})
+
     if( !token ) {
         return res.status(401).json({msg: 'no hay token en la peticion'})
     }
