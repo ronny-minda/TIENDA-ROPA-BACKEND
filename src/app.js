@@ -18,8 +18,9 @@ const main = () => {
 
 
     // Rutas
-    app.use('/api/usuario/', require('./routers/usuario.router'));
     app.use('/api/auth/', require('./routers/auth.router'));
+    app.use('/api/usuario/', require('./routers/usuario.router'));
+    app.use('/api/productos/', require('./routers/productos.router'));
 
 
 

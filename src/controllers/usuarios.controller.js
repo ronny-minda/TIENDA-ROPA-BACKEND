@@ -9,12 +9,18 @@ const { generarJWT } = require('../helpers/generarJWT.help');
 
 const todosUsuarios = async(req, res) => {
 
+    const { desde, hasta } = req.query;
+
 
     //Debuelve el total de usuarios
     const total = await Usuario.countDocuments({estado: true});
 
     //Debuelve todos los usuarios
-    const usuarios = await Usuario.find({estado: true});
+    let usuarios = await Usuario.find({estado: true});
+    
+    
+    usuarios = usuarios.slice(desde, hasta);
+
 
     res.json({
         total,
