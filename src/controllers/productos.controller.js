@@ -12,7 +12,7 @@ const todosProductos = async(req, res) => {
     const productos = await Producto.find().populate('usuario', 'nombre');
     const filtro = productos.slice( desde, hasta );
     
-    console.log(productos);
+    // console.log(productos);
 
     res.json({
         total,
@@ -22,10 +22,25 @@ const todosProductos = async(req, res) => {
 }
 
 // get
-const buscarPorId = (req, res) => {
+const buscarPorId = async(req, res) => {
+
+    const { id } = req.params;
+
     
-    console.log('desde buscar por ID');
-    res.json({msg: 'desde buscar por ID' })
+
+    const producto = await Producto.findById(id);
+
+    if( !producto ) {
+        return res.status(400).json({msg: 'El productono existe o esta mal el ID'});
+    }
+
+    // console.log( producto );
+    
+    // console.log('desde buscar por ID');
+    res.json({
+        msg: 'Producto encontrado',
+        producto
+    });
 
 }
 
@@ -34,12 +49,21 @@ const crearProducto = async(req, res) => {
 
     const { nombre, marca, talla, precio, usuario, cantidad } = req.body;
 
-    const producto = new Producto({ nombre, marca, talla, precio, usuario, cantidad });
+    let producto = await Producto.findOne({nombre});
+
+    if( producto ) {
+        console.log('no esta');
+
+        return res.status(400).json({msg: 'El producto ya existe'});
+    }
+
+    producto = new Producto({ nombre, marca, talla, precio, usuario, cantidad });
 
     await producto.save();
 
     res.json({
-        msg: 'El producto se a creado'
+        msg: 'El producto se a creado',
+        producto
     })
 
 }
@@ -53,11 +77,21 @@ const actualizarProducto = async(req, res) => {
 
     const usu = await Producto.findById(id);
 
-    // usu.cantidad = usu.cantidad - 1;
+    // console.log( usu )
+
+    if( !usu ) {
+        console.log('no esta')
+        return res.status(400).json({msg: 'El producto no existe o esta mal el id'});
+    }
+
+    usu.cantidad = usu.cantidad + producto.cantidad;
+
+    producto = await Producto.findByIdAndUpdate(id, usu, { new: true });
 
     producto = await Producto.findByIdAndUpdate(id, producto, { new: true });
 
     // console.log(producto);
+
     res.json({
         "msg": 'El producto se a actualizado',
         producto
@@ -72,9 +106,9 @@ const borrarProducto = async(req, res) => {
 
     let producto = await Producto.findById(id);
 
-    valor ? null : valor = 3;
+    valor ? null : valor = 1;
 
-    producto.cantidad = producto.cantidad - valor;
+    producto.cantidad = producto.cantidad + valor;
 
     producto = await Producto.findByIdAndUpdate(id, producto, { new: true });
 
@@ -82,7 +116,7 @@ const borrarProducto = async(req, res) => {
     res.json({
         msg: 'desde borrar un Producto',
         producto
-    })
+    });
 
 }
 
@@ -98,3 +132,29 @@ module.exports = {
     actualizarProducto,
     borrarProducto
 }
+
+
+
+
+// const { nombre, marca, talla, precio, usuario, cantidad } = req.body;
+
+// let producto = await Producto.findOne({nombre});
+
+// if( !producto ) {
+//     console.log('noooooo');
+//     producto = new Producto({ nombre, marca, talla, precio, usuario, cantidad });
+// }
+
+// if( producto ) {
+//     console.log('siiiii');
+//     producto.cantidad = producto.cantidad + cantidad;
+//     // producto = new Producto({ nombre, marca, talla, precio, usuario, cantidad });
+// }
+
+// // console.log(producto);
+
+// await producto.save();
+
+// res.json({
+//     msg: 'El producto se a creado'
+// })

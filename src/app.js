@@ -21,6 +21,7 @@ const main = () => {
     app.use('/api/auth/', require('./routers/auth.router'));
     app.use('/api/usuario/', require('./routers/usuario.router'));
     app.use('/api/productos/', require('./routers/productos.router'));
+    app.use('/api/comprar/', require('./routers/comprar.router'));
 
 
 
